@@ -1,0 +1,3 @@
+[submodule "libs/ImGuiTextSelect"]
+	path = libs/ImGuiTextSelect
+	url = https://github.com/AidanSun05/ImGuiTextSelect
