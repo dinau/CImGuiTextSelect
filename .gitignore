@@ -1,3 +1,7 @@
+GPATH
+GRTAGS
+GTAGS
+gen/
 # Prerequisites
 *.d
 
