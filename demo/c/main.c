@@ -15,7 +15,6 @@
 
 #ifdef IMGUI_HAS_IMSTR
 #define igBegin igBegin_Str
-#define igButton igButton_Str
 #endif
 #define igGetIO igGetIO_Nil
 
@@ -26,20 +25,24 @@ const char* lines[] = {
     "Line 3",
     "A longer line",
     "Text selection in Dear ImGui",
-    "UTF-8 characters Ë ⑤ 三【 】┌──┐"
+    "UTF-8 characters Ë ⑤ 三【 】┌──┐",
+    "世界平和"
 };
 
 size_t getNumLines(void* userdata) {
-    return sizeof(lines)/sizeof(lines[0]);
+    const char** clines = (const char**)userdata;
+    size_t count = 0;
+    while (clines[count] != NULL) count++;
+    return count;
 }
 
 const char* getLineAtIdx(size_t idx, void* userdata, size_t* out_len){
+    const char** clines = (const char**)userdata;
     if (out_len != NULL){
-      *out_len = strlen(lines[idx]);
+      *out_len = strlen(clines[idx]);
     }
-    return lines[idx];
+    return clines[idx];
 }
-
 
 //------
 // main
@@ -119,12 +122,14 @@ int main(int argc, char *argv[]) {
       igSeparatorText("Runing with C API");
       ImVec2 size = {.x = 0, .y = 0};
       igBeginChild_Str("text", size, 0, ImGuiWindowFlags_NoMove);
+        igPushFont(NULL, 30); // Zoom font
         size_t num = getNumLines(lines);
-          for (size_t i = 0; i < num; ++i) {
-              const char* line = getLineAtIdx(i, lines, NULL);
-              igTextUnformatted(line, NULL);
-          }
+        for (size_t i = 0; i < num; ++i) {
+          const char* line = getLineAtIdx(i, lines, NULL);
+          igTextUnformatted(line, NULL);
+        }
         textselect_update(pTextselect);
+        igPopFont();
         if (igBeginPopupContextWindow(NULL, 1)) {
             igBeginDisabled(!textselect_has_selection(pTextselect));
             if (igMenuItem_Bool("Copy", "Ctrl+C", false, true)) {

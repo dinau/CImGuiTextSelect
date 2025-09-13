@@ -56,7 +56,7 @@ void setupFonts(void) {
   for(int i=0; i<tableLen; i++){
     fontPath = getWinFontPath(sBufFontPath, sizeof(sBufFontPath), WinFontNameTbl[i]);
     if (existsFile(fontPath)) {
-      font = ImFontAtlas_AddFontFromFileTTF(pio->Fonts, fontPath, point2px(19.0)
+      font = ImFontAtlas_AddFontFromFileTTF(pio->Fonts, fontPath, point2px(14.5)
           , NULL
           , NULL);
       printf("Found FontPath: [%s]\n",fontPath);

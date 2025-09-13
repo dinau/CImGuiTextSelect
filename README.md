@@ -13,8 +13,6 @@
 
 ---
 
-Currently highly work in progress
-
 This project introduces C API to [ImGuiTextSelect](https://github.com/AidanSun05/ImGuiTextSelect) to use it with other languages and
 a simple demo program with C.
 
