@@ -92,7 +92,7 @@ void gui_main(Window *window) {
 // main
 //------
 int main(int argc, char *argv[]) {
-  Window *window = createImGui(1024, 768);
+  Window *window = createImGui(1024, 768, "CImGuiTextSelext");
 
   gui_main(window);
 

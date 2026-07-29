@@ -1,14 +1,10 @@
-#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
 
-#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-#include "cimgui.h"
+#include "imgui.h"
 #include "utils.h"
 #include "setupFonts.h"
-
-#define ImGui_GetIO igGetIO_Nil
 
 #define MAX_PATH  2048
 const char* IconFontPath = "../utils/fonticon/fa6/fa-solid-900.ttf";
@@ -43,21 +39,20 @@ float point2px(float point) { //## Convert point to pixel
   return (point * 96) / 72;
 }
 
-const ImWchar ranges_icon_fonts[]  = {(ImWchar)ICON_MIN_FA, (ImWchar)ICON_MAX_FA, (ImWchar)0};
 /*--------------
  * setupFonts()
  *-------------*/
 void setupFonts(void) {
-  ImGuiIO* pio = ImGui_GetIO();
-  ImFontConfig* config  = ImFontConfig_ImFontConfig();
+  ImGuiIO& pio = ImGui::GetIO();
+  ImFontConfig* config  = new ImFontConfig();
   ImFont* font = NULL;
   char* fontPath;
   int tableLen = sizeof(WinFontNameTbl) / MAX_PATH;
   for(int i=0; i<tableLen; i++){
     fontPath = getWinFontPath(sBufFontPath, sizeof(sBufFontPath), WinFontNameTbl[i]);
     if (existsFile(fontPath)) {
-      font = ImFontAtlas_AddFontFromFileTTF(pio->Fonts, fontPath, point2px(14.5)
-          , NULL
+      font = pio.Fonts->AddFontFromFileTTF(fontPath, point2px(15.0)
+          , config
           , NULL);
       printf("Found FontPath: [%s]\n",fontPath);
       break;
@@ -67,8 +62,8 @@ void setupFonts(void) {
   for(int i=0; i<tableLen; i++){
     fontPath = LinuxFontNameTbl[i];
     if (existsFile(fontPath)) {
-      font = ImFontAtlas_AddFontFromFileTTF(pio->Fonts, fontPath, point2px(13)
-          , NULL
+      font = pio.Fonts->AddFontFromFileTTF(fontPath, point2px(13)
+          , config
           , NULL);
       printf("Found FontPath: [%s]\n",fontPath);
       break;
@@ -77,9 +72,12 @@ void setupFonts(void) {
   if (font == NULL) {
     printf("Error!: Font loading falied: in %s\n", __FILE__);
     printf("Default has been set.\n");
-    ImFontAtlas_AddFontDefault(pio->Fonts, NULL);
+    pio.Fonts->AddFontDefaultVector(NULL);
   }
   // Merge IconFont
   config->MergeMode = true;
-  ImFontAtlas_AddFontFromFileTTF(pio->Fonts, IconFontPath, point2px(11), config , ranges_icon_fonts);
+  font = pio.Fonts->AddFontFromFileTTF(IconFontPath, point2px(11), config , NULL);
+  if (font != NULL){
+    printf("Found Icon FontPath: [%s]\n",IconFontPath);
+  }
 }
